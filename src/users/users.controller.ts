@@ -4,13 +4,16 @@ import {
   Get,
   Param,
   Post,
+  Put,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
+import { ActualizarUserDto, UserDto } from './dto/user.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ValidateObjectidPipe } from 'src/common/validate-objectid/validate-objectid.pipe';
 import { AsignarProgramaDto } from './dto/asignarprograma.dto';
+import { User } from './schema/user.schema';
+import { ActualizarBloqueDto } from 'src/bloque/dto/bloque.dto';
 
 @ApiTags('Usuarios')
 // @UseGuards(AdminAuthGuard)
@@ -23,6 +26,12 @@ export class UsersController {
     description: 'nombre del usuario',
     required: true,
   })
+
+  @Put('actualizar')
+  async actualizarUsuario(@Body() User: ActualizarUserDto) {
+    return await this.usersService.actualizarUsuario(User);
+  }
+
   @Get('/nombre/:nombre')
   async findOne(@Param('nombre') nombre: string) {
     return await this.usersService.findOne(nombre);
@@ -49,6 +58,11 @@ export class UsersController {
   @Get('/instructores')
   async obtenerInstructores() {
     return await this.usersService.obtenerInstructores();
+  }
+
+  @Get()
+  async obtenerTodo() {
+    return await this.usersService.obtenerTodo();
   }
 
   // @Get('/instructor/:id/centro/:centro')

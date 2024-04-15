@@ -6,7 +6,7 @@ import {
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
-import { UserDto } from './dto/user.dto';
+import { ActualizarUserDto, UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { AsignarProgramaDto } from './dto/asignarprograma.dto';
 import { ProgramaService } from 'src/programa/programa.service';
@@ -21,6 +21,18 @@ export class UsersService {
     private instructoresProgramaModel: Model<InstructoresPrograma>,
     private readonly programaService: ProgramaService,
   ) {}
+
+  async obtenerTodo(): Promise<NotFoundException | User[]> {
+    return await this.userModel.find().then((data) => {
+      if (data) {
+        return data;
+      } else {
+        return new NotFoundException(
+          'No se encontraron documentos en usuarios',
+        );
+      }
+    });
+  }
 
   async findOne(nombre: string) {
     return this.userModel
@@ -120,6 +132,20 @@ export class UsersService {
     }
 
     return instructor;
+  }
+
+  /* Todos los metodos de actualizar */
+  async actualizarUsuario(usuario: ActualizarUserDto) {
+    return await this.userModel.findByIdAndUpdate(
+      usuario.id,
+      usuario,
+    ).then((data) => {
+      return data
+        ? usuario
+        : new NotFoundException(
+            `No se encontro el usuario con id:${usuario.id}`,
+          );
+    });
   }
 
   async obtenerInstructorPorCentro(id: string, centro: string) {

@@ -60,6 +60,7 @@ export class ProgramaController {
   @ApiBody({
     type: ActualizarProgramaDto,
   })
+  
   @Put('actualizar')
   async actualizarProgramas(@Body() Programa: ActualizarProgramaDto) {
     return await this.Programa.actualizarPrograma(Programa);

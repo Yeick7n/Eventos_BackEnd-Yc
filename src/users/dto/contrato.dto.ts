@@ -10,7 +10,7 @@ import {
 export class ContratoDto {
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   @Matches(/^(?!\s*$).+/, {
     message: 'El campo numero no debe estar vacio',
   })
